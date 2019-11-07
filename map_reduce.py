@@ -13,7 +13,7 @@ def start_worker(index, hosts):
     server = tf.distribute.Server(cluster_spec, job_name="local", task_index=task)
     while True:
         global running
-        if running: 
+        if not running: 
             break
 
 # Create a cluster spec matching your server spec
@@ -24,7 +24,7 @@ for worker in range(0, num_workers):
     print("Task {} started...".format(worker))
 
 # Input data specification.
-data_size = 100000000
+data_size = 10_000_000
 task_input = tf.compat.v1.placeholder(tf.float32, data_size, name="task_input")
 
 # Partition equally amongst workers and distribute.
@@ -49,4 +49,3 @@ with tf.compat.v1.Session("grpc://localhost:2222") as sess:
     print("\nCompleted: " + str(result))
     print("Servers shutdown.")
     
-
